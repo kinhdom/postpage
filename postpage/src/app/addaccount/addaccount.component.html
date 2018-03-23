@@ -1,0 +1,24 @@
+<ul>
+  <li>
+    acc
+  </li>
+  <li>
+    acc
+  </li>
+  <li>
+    acc
+  </li>
+  <li>
+    acc
+  </li>
+  <li>
+    acc
+  </li>
+</ul>
+<form #formvalue="ngForm" (ngSubmit)="onFormSubmit(formvalue)">
+  <!-- <input type="text" name="code" [(ngModel)]="code"> -->
+  <textarea name="code" id="" cols="30" rows="10" [(ngModel)]="code"></textarea>
+  <button type="submit">OK</button>
+</form>
+
+<p> {{textareahuy}} </p>
