@@ -1,12 +1,14 @@
-<ul>
-  <li   *ngFor = "let info of arrInfor" >
-    {{info.name}}
-  </li>
-</ul>
-<form #formvalue="ngForm" (ngSubmit)="onFormSubmit(formvalue)">
-  <!-- <input type="text" name="code" [(ngModel)]="code"> -->
-  <textarea name="code" id="" cols="30" rows="10" [(ngModel)]="code"></textarea>
-  <button type="submit">OK</button>
-</form>
+<app-nav></app-nav>
+<div class="container">
 
-<p> {{textareahuy}} </p>
+  <ul class="list-group">
+      <li class="list-group-item" *ngFor="let info of arrInfor">{{info.name}}</li>
+    </ul>
+  <form #formvalue="ngForm" (ngSubmit)="onFormSubmit(formvalue)">
+    <!-- <input type="text" name="code" [(ngModel)]="code"> -->
+    <textarea name="code" id="" cols="160" rows="10" [(ngModel)]="code"></textarea>
+    <button type="submit">OK</button>
+  </form>
+
+  <p> {{textareahuy}} </p>
+</div>

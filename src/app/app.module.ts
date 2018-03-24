@@ -12,6 +12,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { PostpageService } from './postpage.service';
 
+import { AngularFireModule } from 'angularfire2';
+import {AngularFireDatabaseModule} from 'angularfire2/database';
+
+import {environment} from '../environments/environment';
+import { LoginComponent } from './login/login.component';
+
+
 
 @NgModule({
   declarations: [
@@ -19,13 +26,16 @@ import { PostpageService } from './postpage.service';
     NavComponent,
     HomeComponent,
     AddaccountComponent,
-    ScanComponent
+    ScanComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule
   ],
   providers: [PostpageService],
   bootstrap: [AppComponent]

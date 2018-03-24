@@ -10,14 +10,23 @@ export class AddaccountComponent implements OnInit {
   textareahuy;
   constructor(private _postpageservice: PostpageService) { }
   arrTokens = []
-  arrInfor: Array<string>
+  arrInfor =[]
   ngOnInit() {
+    
+    this._postpageservice.getListAcount().subscribe(accounts => {
+      this.arrInfor = []
+      accounts.forEach(account => {
+        let huy = JSON.stringify(account)
+        let van = JSON.parse(huy)
+        this.arrInfor.push(van.info)
+      });
+    })
   }
   onFormSubmit(formvalue) {
     let html = formvalue.value.code
     let htmltext = this._postpageservice.html2text(html)
-    let token = this._postpageservice.getToken(htmltext)
-    this.arrTokens.push(token)
-    this.arrInfor = this._postpageservice.getInforUser(this.arrTokens)
+    this._postpageservice.addAcount(htmltext)
+    // this.arrTokens.push(token)
+    // this.arrInfor = this._postpageservice.getInforUser(this.arrTokens)
   }
 }

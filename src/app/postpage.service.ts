@@ -1,26 +1,48 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
+
+const localToken = localStorage.getItem('token');
 
 @Injectable()
 export class PostpageService {
+  usersRef: AngularFireList<any>;
 
-  constructor(private _http: Http) { }
+  constructor(private _http: Http, private _db: AngularFireDatabase) {
+    this.usersRef = this._db.list('postpage/users');
+  }
+
+  // Authenticate
+  addUser(key, password) {
+    this._db.list('postpage/users').push({ password: password })
+  }
+  getUser() {
+    return this.usersRef.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+    });
+  }
+  register(key, password) {
+    this._db.list('postpage/users').update(key, { password: password })
+  }
   // Add account
-  getToken(htmltext) {
+  addAcount(htmltext) {
     let x = htmltext.indexOf('EAAAA')
     let token1 = htmltext.substr(x, 200)
     let y = token1.indexOf("\"")
-    return token1.substr(0, y)
+    let token = token1.substr(0, y)
+    this.getInfo(token).subscribe(info => {
+      // this._db.list('postpage/users/' + localToken + '/accounts').push({ info: info, access_token: token })
+      this._db.list('postpage/users/' + localToken + '/accounts').update(info.id, { info: info, access_token: token })
+    })
   }
-  getInforUser(arrTokens) {
-    let arrInfor = []
-    arrTokens.forEach(token => {
-      let query = 'https://graph.facebook.com/me?access_token=' + token
-      this._http.get(query).subscribe(res => {
-        arrInfor.push(res.json())
-      })
-    });
-    return arrInfor
+
+  getInfo(token) {
+    let query = 'https://graph.facebook.com/me?access_token=' + token
+    return this._http.get(query).map(res => res.json())
+  }
+  getListAcount() {
+    return this._db.list('postpage/users/' + localToken + '/accounts').valueChanges()
   }
   html2text(html) {
     var tag = document.createElement('div');
