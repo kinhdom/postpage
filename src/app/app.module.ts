@@ -10,6 +10,7 @@ import { AddaccountComponent } from './addaccount/addaccount.component';
 import { ScanComponent } from './scan/scan.component';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { PostpageService } from './postpage.service';
 
 
 @NgModule({
@@ -26,7 +27,7 @@ import { HttpModule } from '@angular/http';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [PostpageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

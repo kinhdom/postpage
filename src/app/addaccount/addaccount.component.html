@@ -1,18 +1,6 @@
 <ul>
-  <li>
-    acc
-  </li>
-  <li>
-    acc
-  </li>
-  <li>
-    acc
-  </li>
-  <li>
-    acc
-  </li>
-  <li>
-    acc
+  <li   *ngFor = "let info of arrInfor" >
+    {{info.name}}
   </li>
 </ul>
 <form #formvalue="ngForm" (ngSubmit)="onFormSubmit(formvalue)">
