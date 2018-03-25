@@ -1,13 +1,16 @@
 <app-nav></app-nav>
 <div class="container">
-
   <ul class="list-group">
-      <li class="list-group-item" *ngFor="let info of arrInfor">{{info.name}}</li>
-    </ul>
+    <li class="list-group-item" *ngFor="let info of arrInfor">{{info.name}}</li>
+  </ul>
   <form #formvalue="ngForm" (ngSubmit)="onFormSubmit(formvalue)">
-    <!-- <input type="text" name="code" [(ngModel)]="code"> -->
-    <textarea name="code" id="" cols="160" rows="10" [(ngModel)]="code"></textarea>
-    <button type="submit">OK</button>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">With textarea</span>
+      </div>
+      <textarea class="form-control" aria-label="With textarea" name="code"  [(ngModel)]="code"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
   </form>
 
   <p> {{textareahuy}} </p>

@@ -14,6 +14,7 @@ import { PostpageService } from './postpage.service';
 
 import { AngularFireModule } from 'angularfire2';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
+import {AngularFireStorageModule} from 'angularfire2/storage';
 
 import {environment} from '../environments/environment';
 import { LoginComponent } from './login/login.component';
@@ -35,7 +36,8 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFireStorageModule
   ],
   providers: [PostpageService],
   bootstrap: [AppComponent]
