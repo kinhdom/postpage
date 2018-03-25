@@ -8,10 +8,15 @@ import { AngularFireStorage } from 'angularfire2/storage';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  content;
+  pages;
+  
   isLogin: boolean = false
   arrAcc = []
+  // arrSelectedAcc = []
   selectedAcc = false
-  selectedImage: any;
+  urlSelectedImage = '';
+  percentUploadImage: number
 
   constructor(private _postpageservice: PostpageService, private _storage: AngularFireStorage) { }
   ngOnInit() {
@@ -23,21 +28,45 @@ export class HomeComponent implements OnInit {
           let acc_string = JSON.stringify(acc)
           let acc_json = JSON.parse(acc_string)
           acc_json.info.isSelected = false
-          this.arrAcc.push(acc_json.info)
+          this.arrAcc.push(acc_json)
         });
       })
     }
   }
   onClickAcc(event, acc) {
-    acc.isSelected = !acc.isSelected
-    acc.isSelected ? event.target.attributes[1].value = 'list-group-item active' : event.target.attributes[1].value = 'list-group-item'
+    acc.info.isSelected = !acc.info.isSelected
+    acc.info.isSelected ? event.target.attributes[1].value = 'list-group-item active' : event.target.attributes[1].value = 'list-group-item'
   }
   onFileSelected(event) {
-    this.selectedImage = event.target.files[0]
+    let selectedImage = event.target.files[0]
     let filepath = 'postpage/' + new Date().getFullYear().toString() + '/' + new Date().getMonth().toString() + '/' + new Date().getDate().toString() + Math.random().toString()
-    let taskUpload = this._storage.upload(filepath, this.selectedImage)
-    taskUpload.downloadURL().subscribe(url=>{
-      console.log(url)
+    let taskUpload = this._storage.upload(filepath, selectedImage)
+    taskUpload.percentageChanges().subscribe(percent => {
+      this.percentUploadImage = Math.round(percent)
     })
+    taskUpload.downloadURL().subscribe(url => {
+      this.urlSelectedImage = url;
+    })
+  }
+  onFormSubmit(form) {
+    let arrSelectedAcc = []
+    let content = form.value.content
+
+    let image = this.urlSelectedImage;
+    if (form.value.pages) {
+      let pages_string = form.value.pages; //Chuyển thành mảng các id page
+      var pages_array = pages_string.split("\n")
+    }
+
+
+    // let accs; // Chuyển thành mảng các acc có isSelected = true
+    this.arrAcc.forEach(acc => {
+      if (acc.info.isSelected) {
+        arrSelectedAcc.push(acc)
+        
+      }
+    });
+    this._postpageservice.postConent(content, image, pages_array, arrSelectedAcc)
+
   }
 }

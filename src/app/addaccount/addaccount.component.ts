@@ -7,6 +7,7 @@ import { PostpageService } from '../postpage.service';
   styleUrls: ['./addaccount.component.css']
 })
 export class AddaccountComponent implements OnInit {
+  code;
   textareahuy;
   constructor(private _postpageservice: PostpageService) { }
   arrTokens = []

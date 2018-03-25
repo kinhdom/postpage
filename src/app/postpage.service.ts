@@ -51,5 +51,17 @@ export class PostpageService {
   }
   // Scan id
   // Post content
+  postConent(content, image, pages, accs) {
+    for (var i = 0; i < pages.length; i++) {
+      if (i > accs.length) {
+        var j = i % accs.length
+      } else {
+        var j = i
+      }
+      let query = 'https://graph.facebook.com/v2.11/' + pages[i] + '/photos'
+      this._http.post(query, { access_token: accs[j].access_token, caption: content, url: image }).map(res => res.json()).subscribe(res => console.log(res))
+    }
+
+  }
 
 }

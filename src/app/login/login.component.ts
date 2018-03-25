@@ -8,6 +8,9 @@ import { PostpageService } from '../postpage.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  password;
+  content;
+  key;
   constructor(private router: Router, private _postpageservice: PostpageService) { }
 
   ngOnInit() {

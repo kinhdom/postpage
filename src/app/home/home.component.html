@@ -1,50 +1,56 @@
 <app-nav></app-nav>
 <div class="container">
-
-  <div class="row">
-    <!-- Start Content -->
-    <div class="col">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">With textarea</span>
+  <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
+    <div class="row">
+      <!-- Start Content -->
+      <div class="col">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">With textarea</span>
+          </div>
+          <textarea class="form-control" aria-label="With textarea" name="content" [(ngModel)]="content"></textarea>
         </div>
-        <textarea class="form-control" aria-label="With textarea"></textarea>
-      </div>
 
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="customFile" (change)="onFileSelected($event)">
-        <label class="custom-file-label" for="customFile">Choose file</label>
-      </div>
-    </div>
-    <!-- End Content -->
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="customFile" (change)="onFileSelected($event)">
+          <label class="custom-file-label" for="customFile">Choose file</label>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" [style.width]=" percentUploadImage +'%'" aria-valuemin="0" aria-valuemax="100">{{percentUploadImage}}%</div>
+          </div>
 
-    <!-- Start Pages -->
-    <div class="col">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Pages</span>
         </div>
-        <textarea class="form-control" aria-label="With textarea"></textarea>
+        <img [src]="urlSelectedImage" width="400" alt="">
       </div>
-    </div>
-    <!-- End Pages -->
-  </div>
-  <div class="row">
-    <!-- Start Acc -->
-    <div class="col">
-      <ul class="list-group">
-        <li class="list-group-item" *ngFor="let acc of arrAcc" (click)="onClickAcc($event,acc)">
-          {{acc.name}} </li>
-      </ul>
-    </div>
-    <!-- End Acc -->
+      <!-- End Content -->
 
-    <!-- Start Button -->
-    <div class="col">
-      <button type="button" class="btn btn-primary">Start</button>
-      <button type="button" class="btn btn-secondary">Secondary</button>
-      <button type="button" class="btn btn-success">Success</button>
+      <!-- Start Pages -->
+      <div class="col">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Pages</span>
+          </div>
+          <textarea class="form-control" aria-label="With textarea" name="pages" [(ngModel)]="pages"></textarea>
+        </div>
+      </div>
+      <!-- End Pages -->
     </div>
-    <!-- End Button -->
-  </div>
+    <div class="row">
+      <!-- Start Acc -->
+      <div class="col">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let acc of arrAcc" (click)="onClickAcc($event,acc)">
+            {{acc.info.name}} </li>
+        </ul>
+      </div>
+      <!-- End Acc -->
+
+      <!-- Start Button -->
+      <div class="col">
+        <button type="submit" class="btn btn-primary" *ngIf="urlSelectedImage">Start</button>
+        <button type="button" class="btn btn-secondary">Secondary</button>
+        <button type="button" class="btn btn-success">Success</button>
+      </div>
+      <!-- End Button -->
+    </div>
+  </form>
 </div>
