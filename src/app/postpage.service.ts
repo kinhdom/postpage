@@ -3,10 +3,13 @@ import { Http } from '@angular/http';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
+
+
 const localToken = localStorage.getItem('token');
 
 @Injectable()
 export class PostpageService {
+  page_name;
   usersRef: AngularFireList<any>;
 
   constructor(private _http: Http, private _db: AngularFireDatabase) {
@@ -32,7 +35,6 @@ export class PostpageService {
     let y = token1.indexOf("\"")
     let token = token1.substr(0, y)
     this.getInfo(token).subscribe(info => {
-      // this._db.list('postpage/users/' + localToken + '/accounts').push({ info: info, access_token: token })
       this._db.list('postpage/users/' + localToken + '/accounts').update(info.id, { info: info, access_token: token })
     })
   }
@@ -53,15 +55,45 @@ export class PostpageService {
   // Post content
   postConent(content, image, pages, accs) {
     for (var i = 0; i < pages.length; i++) {
-      if (i > accs.length) {
+      if (i > accs.length - 1) {
         var j = i % accs.length
       } else {
         var j = i
       }
       let query = 'https://graph.facebook.com/v2.11/' + pages[i] + '/photos'
-      this._http.post(query, { access_token: accs[j].access_token, caption: content, url: image }).map(res => res.json()).subscribe(res => console.log(res))
+      let data = {
+        option:{
+          access_token: accs[j].access_token,
+          caption: content,
+          url: image
+        },
+        acc:{
+          id:accs[j].info.id,
+          name:accs[j].info.name
+        }
+      }
+      let infoPage = this.getInfoPage(pages[i], data.option.access_token).subscribe(infopage => {
+        var post = {
+          post_id: '',
+          post_message: content,
+          post_image: image,
+          post_onpage_id: infopage.id,
+          post_onpage_name: infopage.name,
+          from_id: data.acc.id,
+          from_name: data.acc.name,
+        }
+        this._http.post(query, data.option).map(res => res.json()).subscribe(res => {
+          post.post_id = res.post_id
+          this._db.list('postpage/dashboard/' + localToken + '/' + post.from_id).push({ post: post })
+          console.log(res)
+        })
+      })
+
     }
 
   }
-
+  getInfoPage(uid, access_token) {
+    let query = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
+    return this._http.get(query).map(res => res.json())
+  }
 }

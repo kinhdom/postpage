@@ -1,0 +1,34 @@
+<app-nav></app-nav>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Caption</th>
+        <th scope="col">Image</th>
+        <th scope="col">Page</th>
+        <th scope="col">Account</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let result of arrResult; let i = index">
+        <th scope="row"> {{i+1}} </th>
+        <!-- Caption -->
+        <td> <a href="https://www.facebook.com/{{result.post_id}}" target="_blank"> {{result.post_message}} </a> </td>
+        <!-- Image -->
+        <td>
+          <img [src]="result.post_image" alt="" width="100"> </td>
+        <!-- Page -->
+        <td>
+          <a href="https://www.facebook.com/{{result.post_onpage_id}}" target="_blank"> {{result.post_onpage_name}} </a>
+          <img src="https://graph.facebook.com/{{result.post_onpage_id}}/picture?width=50&height=50" alt="">
+        </td>
+        <!-- Account -->
+        <td>
+          <a href="https://www.facebook.com/{{result.from_id}}" target="_blank" > {{result.from_name}} </a>
+          <img src="https://graph.facebook.com/{{result.from_id}}/picture?width=50&height=50" alt="">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

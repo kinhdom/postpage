@@ -10,14 +10,14 @@ import { AngularFireStorage } from 'angularfire2/storage';
 export class HomeComponent implements OnInit {
   content;
   pages;
-  
+
   isLogin: boolean = false
   arrAcc = []
   // arrSelectedAcc = []
   selectedAcc = false
   urlSelectedImage = '';
   percentUploadImage: number
-
+  access_token = '';
   constructor(private _postpageservice: PostpageService, private _storage: AngularFireStorage) { }
   ngOnInit() {
     let token = localStorage.getItem('token')
@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit {
         arrInfo.forEach(acc => {
           let acc_string = JSON.stringify(acc)
           let acc_json = JSON.parse(acc_string)
+          this.access_token = acc_json.access_token
           acc_json.info.isSelected = false
           this.arrAcc.push(acc_json)
         });
@@ -50,23 +51,35 @@ export class HomeComponent implements OnInit {
   }
   onFormSubmit(form) {
     let arrSelectedAcc = []
+    let arrPages = []
     let content = form.value.content
 
     let image = this.urlSelectedImage;
-    if (form.value.pages) {
-      let pages_string = form.value.pages; //Chuyển thành mảng các id page
-      var pages_array = pages_string.split("\n")
-    }
-
 
     // let accs; // Chuyển thành mảng các acc có isSelected = true
     this.arrAcc.forEach(acc => {
       if (acc.info.isSelected) {
         arrSelectedAcc.push(acc)
-        
       }
     });
-    this._postpageservice.postConent(content, image, pages_array, arrSelectedAcc)
+    if (form.value.pages) {
+      let pages_string = form.value.pages; //Chuyển thành mảng các id page
+      var pages_array = pages_string.split("\n")
+      pages_array.forEach(uidPage => {
+        this._postpageservice.getInfoPage(uidPage, this.access_token).subscribe(infopage => {
+          if (infopage.can_post) {
+            arrPages.push(uidPage)
+          }else{
+            console.log(uidPage+' can not post')
+          }
+        })
+      });
+      this._postpageservice.postConent(content, image, arrPages, arrSelectedAcc)
+
+    }
+
+
+
 
   }
 }

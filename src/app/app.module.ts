@@ -10,14 +10,17 @@ import { AddaccountComponent } from './addaccount/addaccount.component';
 import { ScanComponent } from './scan/scan.component';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+
 import { PostpageService } from './postpage.service';
+import { DashboardserviceService } from './dashboardservice.service';
 
 import { AngularFireModule } from 'angularfire2';
-import {AngularFireDatabaseModule} from 'angularfire2/database';
-import {AngularFireStorageModule} from 'angularfire2/storage';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 
@@ -28,7 +31,8 @@ import { LoginComponent } from './login/login.component';
     HomeComponent,
     AddaccountComponent,
     ScanComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,7 @@ import { LoginComponent } from './login/login.component';
     AngularFireDatabaseModule,
     AngularFireStorageModule
   ],
-  providers: [PostpageService],
+  providers: [PostpageService, DashboardserviceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
