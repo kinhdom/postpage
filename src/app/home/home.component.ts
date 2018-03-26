@@ -10,9 +10,9 @@ import { AngularFireStorage } from 'angularfire2/storage';
 export class HomeComponent implements OnInit {
   content;
   pages;
-
   isLogin: boolean = false
-  arrAcc = []
+  arrAcc = [];
+  msg = [];
   // arrSelectedAcc = []
   selectedAcc = false
   urlSelectedImage = '';
@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit {
       this.urlSelectedImage = url;
     })
   }
+
   onFormSubmit(form) {
     let arrSelectedAcc = []
     let arrPages = []
@@ -62,20 +63,43 @@ export class HomeComponent implements OnInit {
         arrSelectedAcc.push(acc)
       }
     });
+
+
     if (form.value.pages) {
       let pages_string = form.value.pages; //Chuyển thành mảng các id page
       var pages_array = pages_string.split("\n")
-      pages_array.forEach(uidPage => {
-        this._postpageservice.getInfoPage(uidPage, this.access_token).subscribe(infopage => {
+      for (var i = 0; i < pages_array.length; i++) {
+        if (i > arrSelectedAcc.length - 1) {
+          var j = i % arrSelectedAcc.length
+        } else {
+          var j = i
+        }
+        let page = pages_array[i]
+        let acc = arrSelectedAcc[j]
+        this._postpageservice.getInfoPage(page, this.access_token).subscribe(infopage => {
           if (infopage.can_post) {
-            arrPages.push(uidPage)
-          }else{
-            console.log(uidPage+' can not post')
+
+            this._postpageservice.postConentNew(content, image, page, acc)
+          } else {
+            this.msg.push('Fail: ' + page)
+            console.log(page + ' can not post')
           }
         })
-      });
-      this._postpageservice.postConent(content, image, arrPages, arrSelectedAcc)
+        // pages_array.forEach(uidPage => {
+        //   this._postpageservice.getInfoPage(uidPage, this.access_token).subscribe(infopage => {
+        //     if (infopage.can_post) {
+        //       this._postpageservice.postConentNew(content, image, uidPage, arrSelectedAcc[j])
+        //     } else {
+        //       console.log(uidPage + ' can not post')
+        //     }
+        //   })
+        // });
+      }
 
+      // this._postpageservice.postConent(content, image, arrPages, arrSelectedAcc)
+
+    }else{
+      this.msg.push('Nhập UID page cần đăng')
     }
 
 

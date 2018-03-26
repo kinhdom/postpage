@@ -14,7 +14,7 @@
       <tr *ngFor="let result of arrResult; let i = index">
         <th scope="row"> {{i+1}} </th>
         <!-- Caption -->
-        <td> <a href="https://www.facebook.com/{{result.post_id}}" target="_blank"> {{result.post_message}} </a> </td>
+        <td> <a href="https://www.facebook.com/{{result.post_id}}" target="_blank"> {{result.post_message || result.post_id}} </a> </td>
         <!-- Image -->
         <td>
           <img [src]="result.post_image" alt="" width="100"> </td>

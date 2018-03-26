@@ -1,5 +1,8 @@
 <app-nav></app-nav>
 <div class="container">
+  <ul>
+    <li *ngFor="let m of msg"> {{m}} </li>
+  </ul>
   <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
     <div class="row">
       <!-- Start Content -->
@@ -39,7 +42,11 @@
       <div class="col">
         <ul class="list-group">
           <li class="list-group-item" *ngFor="let acc of arrAcc" (click)="onClickAcc($event,acc)">
-            {{acc.info.name}} </li>
+            {{acc.info.name}}
+            <div class="input-group-text">
+              <input type="checkbox" aria-label="Checkbox for following text input">
+            </div>
+          </li>
         </ul>
       </div>
       <!-- End Acc -->
@@ -53,4 +60,6 @@
       <!-- End Button -->
     </div>
   </form>
+
+
 </div>

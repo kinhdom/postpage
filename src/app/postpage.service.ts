@@ -53,45 +53,77 @@ export class PostpageService {
   }
   // Scan id
   // Post content
-  postConent(content, image, pages, accs) {
-    for (var i = 0; i < pages.length; i++) {
-      if (i > accs.length - 1) {
-        var j = i % accs.length
-      } else {
-        var j = i
+  postConentNew(content, image, page, acc) {
+    console.log(acc)
+    console.log(page)
+    let query = 'https://graph.facebook.com/v2.11/' + page + '/photos'
+    let data = {
+      option: {
+        access_token: acc.access_token,
+        caption: content,
+        url: image
+      },
+      acc: {
+        id: acc.info.id,
+        name: acc.info.name
       }
-      let query = 'https://graph.facebook.com/v2.11/' + pages[i] + '/photos'
-      let data = {
-        option:{
-          access_token: accs[j].access_token,
-          caption: content,
-          url: image
-        },
-        acc:{
-          id:accs[j].info.id,
-          name:accs[j].info.name
-        }
-      }
-      let infoPage = this.getInfoPage(pages[i], data.option.access_token).subscribe(infopage => {
-        var post = {
-          post_id: '',
-          post_message: content,
-          post_image: image,
-          post_onpage_id: infopage.id,
-          post_onpage_name: infopage.name,
-          from_id: data.acc.id,
-          from_name: data.acc.name,
-        }
-        this._http.post(query, data.option).map(res => res.json()).subscribe(res => {
-          post.post_id = res.post_id
-          this._db.list('postpage/dashboard/' + localToken + '/' + post.from_id).push({ post: post })
-          console.log(res)
-        })
-      })
-
     }
-
+    this.getInfoPage(page, data.option.access_token).subscribe(infopage => {
+      var post = {
+        post_id: '',
+        post_message: content,
+        post_image: image,
+        post_onpage_id: infopage.id,
+        post_onpage_name: infopage.name,
+        from_id: data.acc.id,
+        from_name: data.acc.name,
+      }
+      this._http.post(query, data.option).map(res => res.json()).subscribe(res => {
+        post.post_id = res.post_id
+        this._db.list('postpage/dashboard/' + localToken + '/' + post.from_id).push({ post: post })
+        console.log(res)
+      })
+    })
   }
+  // postConent(content, image, pages, accs) {
+  //   for (var i = 0; i < pages.length; i++) {
+  //     if (i > accs.length - 1) {
+  //       var j = i % accs.length
+  //     } else {
+  //       var j = i
+  //     }
+  //     let query = 'https://graph.facebook.com/v2.11/' + pages[i] + '/photos'
+  //     let data = {
+  //       option:{
+  //         access_token: accs[j].access_token,
+  //         caption: content,
+  //         url: image
+  //       },
+  //       acc:{
+  //         id:accs[j].info.id,
+  //         name:accs[j].info.name
+  //       }
+  //     }
+  //     let infoPage = this.getInfoPage(pages[i], data.option.access_token).subscribe(infopage => {
+  //       var post = {
+  //         post_id: '',
+  //         post_message: content,
+  //         post_image: image,
+  //         post_onpage_id: infopage.id,
+  //         post_onpage_name: infopage.name,
+  //         from_id: data.acc.id,
+  //         from_name: data.acc.name,
+  //       }
+  //       this._http.post(query, data.option).map(res => res.json()).subscribe(res => {
+  //         post.post_id = res.post_id
+  //         this._db.list('postpage/dashboard/' + localToken + '/' + post.from_id).push({ post: post })
+  //         console.log(res)
+  //       })
+  //     })
+
+  //   }
+
+  // }
   getInfoPage(uid, access_token) {
     let query = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
     return this._http.get(query).map(res => res.json())
